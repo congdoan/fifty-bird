@@ -22,8 +22,15 @@ WINDOW_HEIGHT = 720
 VIRTUAL_WIDTH = 512
 VIRTUAL_HEIGHT = 288
 
+BACKGROUND_VELOCITY = 30
+GROUND_VELOCITY = 60
+
+BACKGROUND_LOOPING_POINT = 413
+
 local background = love.graphics.newImage('background.png')
+local backgroundScroll = 0
 local ground = love.graphics.newImage('ground.png')
+local groundScroll = 0
 
 function love.load()
     love.graphics.setDefaultFilter('nearest', 'nearest')
@@ -39,6 +46,11 @@ function love.resize(w, h)
     push:resize(w, h)
 end
 
+function love.update(dt)
+    backgroundScroll = (backgroundScroll + BACKGROUND_VELOCITY * dt) % BACKGROUND_LOOPING_POINT
+    groundScroll = (groundScroll + GROUND_VELOCITY * dt) % VIRTUAL_WIDTH
+end
+
 function love.keypressed(key)
     if key == 'escape' then
         love.event.quit()
@@ -47,7 +59,7 @@ end
 
 function love.draw()
     push:start()
-    love.graphics.draw(background, 0, 0)
-    love.graphics.draw(ground, 0, VIRTUAL_HEIGHT - 16)
+    love.graphics.draw(background, -backgroundScroll, 0)
+    love.graphics.draw(ground, -groundScroll, VIRTUAL_HEIGHT - 16)
     push:finish()
 end
