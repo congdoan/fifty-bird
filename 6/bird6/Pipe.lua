@@ -11,13 +11,10 @@
 
 Pipe = Class{}
 
--- since we only want the image loaded once, not per instantation, define it externally
 local PIPE_IMAGE = love.graphics.newImage('pipe.png')
 
--- speed at which the pipe should scroll right to left
 PIPE_SPEED = 60
 
--- height of pipe image, globally accessible
 PIPE_HEIGHT = 288
 PIPE_WIDTH = 70
 
@@ -36,7 +33,9 @@ function Pipe:update(dt)
 end
 
 function Pipe:render()
-    love.graphics.draw(PIPE_IMAGE, self.x, 
-        (self.orientation == 'top' and self.y + PIPE_HEIGHT or self.y), 
-        0, 1, self.orientation == 'top' and -1 or 1)
+    if self.orientation == 'top'then
+        love.graphics.draw(PIPE_IMAGE, self.x, self.y + PIPE_HEIGHT, 0, 1, -1)
+    else
+        love.graphics.draw(PIPE_IMAGE, self.x, self.y, 0, 1, 1)
+    end
 end
